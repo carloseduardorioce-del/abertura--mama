@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <title>Mulheres Jovens e o Câncer de Mama</title>
+
+  <style>
+    body {
+      margin: 0;
+      background: #fce8ef;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      min-height: 100dvh;
+      overflow: hidden;
+    }
+
+    video {
+      width: 100%;
+      height: 100vh;
+      height: 100dvh;
+      object-fit: contain;
+    }
+
+    .botoes {
+      position: fixed;
+      bottom: 25px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+    }
+
+    button {
+      padding: 12px 20px;
+      border: none;
+      border-radius: 25px;
+      background: white;
+      color: #9c315c;
+      font-size: 15px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+
+<body>
+
+  <video id="abertura" autoplay muted playsinline>
+    <source src="WhatsApp Video 2026-10-13 at 22.36.56.mp4" type="video/mp4">
+  </video>
+
+  <div class="botoes">
+    <button onclick="ativarSom()" id="som">
+      Ativar som
+    </button>
+
+    <button onclick="abrirFormulario()">
+      Pular apresentação
+    </button>
+  </div>
+
+  <script>
+    const formulario = "https://docs.google.com/forms/d/e/1FAIpQLScsnn8aCf7_vfjfXpOB0akObsYx4K8nMHpuR5Wb65XGPwyqIA/viewform?usp=dialog";
+
+    const video = document.getElementById("abertura");
+
+    function abrirFormulario() {
+      window.location.replace(formulario);
+    }
+
+    function ativarSom() {
+      video.muted = !video.muted;
+
+      document.getElementById("som").textContent =
+        video.muted ? "Ativar som" : "Silenciar";
+    }
+
+    video.addEventListener("ended", abrirFormulario);
+
+    video.addEventListener("error", () => {
+      document.querySelector(".botoes button:last-child")
+        .textContent = "Abrir pesquisa";
+    });
+  </script>
+
+</body>
+</html>
