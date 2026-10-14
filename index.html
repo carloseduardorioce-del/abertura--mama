@@ -49,7 +49,7 @@
 
 <body>
 
-  <video id="abertura" autoplay playsinline>
+  <video id="abertura" playsinline preload="auto">
   <source src="mama.mp4" type="video/mp4">
 </video>
 
@@ -63,29 +63,63 @@
     </button>
   </div>
 
-  <script>
-    const formulario = "https://docs.google.com/forms/d/e/1FAIpQLScsnn8aCf7_vfjfXpOB0akObsYx4K8nMHpuR5Wb65XGPwyqIA/viewform?usp=dialog";
+ 
+<script>
+  const formulario = "https://docs.google.com/forms/d/e/1FAIpQLScsnn8aCf7_vfjfXpOB0akObsYx4K8nMHpuR5Wb65XGPwyqIA/viewform?usp=dialog";
 
-    const video = document.getElementById("abertura");
+  const video = document.getElementById("abertura");
+  const botaoSom = document.getElementById("som");
 
-    function abrirFormulario() {
-      window.location.replace(formulario);
+  function abrirFormulario() {
+    window.location.replace(formulario);
+  }
+
+  function atualizarBotaoSom() {
+    botaoSom.textContent = video.muted
+      ? "Ativar som"
+      : "Silenciar";
+  }
+
+  async function iniciarVideo() {
+    try {
+      // Primeiro tenta reproduzir com som
+      video.muted = false;
+      await video.play();
+    } catch (erro) {
+      // Se o navegador bloquear, tenta sem som
+      video.muted = true;
+      try {
+        await video.play();
+      } catch (erro2) {
+        console.error("Não foi possível iniciar o vídeo:", erro2);
+      }
     }
+    atualizarBotaoSom();
+  }
 
-    function ativarSom() {
-      video.muted = !video.muted;
+  async function ativarSom() {
+    video.muted = !video.muted;
+    atualizarBotaoSom();
 
-      document.getElementById("som").textContent =
-        video.muted ? "Ativar som" : "Silenciar";
+    if (video.paused) {
+      try {
+        await video.play();
+      } catch (erro) {
+        console.error("Não foi possível reproduzir:", erro);
+      }
     }
+  }
 
-    video.addEventListener("ended", abrirFormulario);
+  video.addEventListener("ended", abrirFormulario);
 
-    video.addEventListener("error", () => {
-      document.querySelector(".botoes button:last-child")
-        .textContent = "Abrir pesquisa";
-    });
-  </script>
+  video.addEventListener("error", () => {
+    document.querySelector(".botoes button:last-child")
+      .textContent = "Abrir pesquisa";
+  });
+
+  iniciarVideo();
+</script>
+
 
 </body>
 </html>
